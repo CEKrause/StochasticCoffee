@@ -4,18 +4,34 @@ import numpy as np
 import smtplib
 import pandas as pd
 
+def filterFrequency(names):
+    week_no = int(names.columns[-1].split('week')[1])
+    thisweek = []
+    for index, row in names.iterrows():
+        if week_no % int(row['frequency']) == 0:
+            thisweek.append(True)
+        else:
+            thisweek.append(False)
+    names['this_week'] = thisweek
+
+    names = names[names['this_week']].drop(labels = 'this_week', axis = 1)
+
+    return names
+
 def runMatch(NamesDB):
     NamesPID = list(NamesDB.PID.values)
     pairs = []
     # If there are more than two people left
     while len(NamesPID) > 2:
-        CurrentMatch = NamesDB.PID[0]
-        previousMatches = [NamesDB.matches[0]]
+        CurrentMatch = NamesPID[0]
+        #previousMatches = [NamesDB.week1[0]]
+        previousMatches = [col for col in NamesDB.columns if col[0:4] == 'week']
+        previousMatchesL = list(NamesDB[previousMatches].iloc[0].values.astype(int))
         # Add yourself to the previous matches to stop you being matched with yourself
-        previousMatches.append(CurrentMatch)
-        AllParticipants = list(NamesDB.PID)
+        previousMatchesL.append(CurrentMatch)
+        AllParticipants = list(NamesPID)
         # Possible matches are elements NOT in BOTH lists
-        possibleMatches = set(AllParticipants) ^ set(previousMatches)
+        possibleMatches = set(AllParticipants) ^ set(previousMatchesL)
         Name1 = NamesPID[0]
         rand2 = random.choice(list(possibleMatches))
         NamesPID.remove(Name1)
@@ -35,15 +51,22 @@ def runMatch(NamesDB):
     pairsDoubled = pairsDoubled.rename({'personA': 'personB', 'personB': 'personA'}, axis = 1)
     pairsLong = pd.concat([pairsDF, pairsDoubled]).reset_index(drop = True)
     AppendedDB = appendMatches(NamesDB, pairsLong)
+    writeToCSV(NamesDB, AppendedDB)
     
     return pairsLong, AppendedDB
 
 def appendMatches(NamesDB, pairsLong):
     AppendedDB = pd.merge(NamesDB, pairsLong, left_on='PID', right_on = 'personA')
     AppendedDB = AppendedDB.drop(['personA'], axis = 1)
-    AppendedDB = AppendedDB.rename({'personB': 'week2'}, axis = 1)
+    ColumnName = 'week' + str(StartWeek)
+    AppendedDB = AppendedDB.rename({'personB': ColumnName}, axis = 1)
     
     return AppendedDB
+
+def writeToCSV(NamesDB, AppendedDB):
+    #ToWrite = pd.merge(NamesDB, AppendedDB, left_on='PID')
+    with open('TestNames.csv', 'w') as f:
+        AppendedDB.to_csv(f, index=False)
     
 def buildEmail(fname, other_person_fname , other_person_lname, other_person_email):
     message = ('Hi ' + fname + ',\n' + 'For this week\'s StochastiCoffee catchup, you\'ve drawn ' +
@@ -68,3 +91,8 @@ def sendEmail(names, matches):
         server.sendmail(gmail_user, email, message)
 
     server.quit()
+    
+StartWeek = 2
+NamesDB = pd.read_csv('TestNames.csv')
+#Namestomatch = filterFrequency(NamesDB)
+matches, AppendedNamesDB = runMatch(NamesDB)
