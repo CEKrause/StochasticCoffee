@@ -34,9 +34,17 @@ def runMatch(NamesDB):
     pairsDoubled = pairsDF.copy()
     pairsDoubled = pairsDoubled.rename({'personA': 'personB', 'personB': 'personA'}, axis = 1)
     pairsLong = pd.concat([pairsDF, pairsDoubled]).reset_index(drop = True)
+    AppendedDB = appendMatches(NamesDB, pairsLong)
     
-    return NamesDB, pairsLong
+    return pairsLong, AppendedDB
 
+def appendMatches(NamesDB, pairsLong):
+    AppendedDB = pd.merge(NamesDB, pairsLong, left_on='PID', right_on = 'personA')
+    AppendedDB = AppendedDB.drop(['personA'], axis = 1)
+    AppendedDB = AppendedDB.rename({'personB': 'week2'}, axis = 1)
+    
+    return AppendedDB
+    
 def buildEmail(fname, other_person_fname , other_person_lname, other_person_email):
     message = ('Hi ' + fname + ',\n' + 'For this week\'s StochastiCoffee catchup, you\'ve drawn ' +
                other_person_fname + ' ' + other_person_lname + '.\nContact ' + other_person_fname +
