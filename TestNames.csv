@@ -1,5 +1,5 @@
-PID,First Name,Last Name,email,branch,division,frequency
-0,Claire,Krause,claire.e.krause@gmail.com,NEMO,EGD,1
-1,Michael,Barnes,michael.barnes@ga.gov.au,Groundwater,EGD,1
-2,Eloise,Aitken,Eloise.Aitken@ga.gov.au,DiSi,IT,2
-3,Andrew,Turner,Andrew.Turner@ga.gov.au,DiSi,IT,3
+PID,First Name,Last Name,email,branch,division,frequency,matches
+0,Claire,Krause,claire.e.krause@gmail.com,NEMO,EGD,1,2
+1,Michael,Barnes,michael.barnes@ga.gov.au,Groundwater,EGD,1,4
+2,Eloise,Aitken,Eloise.Aitken@ga.gov.au,DiSi,IT,2,0
+4,Andrew,Turner,Andrew.Turner@ga.gov.au,DiSi,IT,3,1
