@@ -1,0 +1,10 @@
+week_no = int(names.columns[-1].split('week')[1])
+thisweek = []
+for index, row in names.iterrows():
+    if week_no % int(row['frequency']) == 0:
+        thisweek.append(True)
+    else:
+        thisweek.append(False)
+names['this_week'] = thisweek
+
+names[names['this_week']]
