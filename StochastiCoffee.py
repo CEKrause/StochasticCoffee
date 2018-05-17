@@ -4,23 +4,33 @@ import numpy as np
 import smtplib
 import pandas as pd
 
-def pop_random(lst):
-    idx = random.randrange(0, len(lst))
-    return lst.pop(idx)
-
-def runMatch(csvfile):
-    NamesDB = pd.read_csv(csvfile)
+def runMatch(NamesDB):
     NamesPID = list(NamesDB.PID.values)
     pairs = []
-    while len(NamesPID) > 0:
-        rand1 = pop_random(NamesPID)
-        rand2 = pop_random(NamesPID)
-        pair = rand1, rand2
+    # If there are more than two people left
+    while len(NamesPID) > 2:
+        CurrentMatch = NamesDB.PID[0]
+        previousMatches = [NamesDB.matches[0]]
+        # Add yourself to the previous matches to stop you being matched with yourself
+        previousMatches.append(CurrentMatch)
+        AllParticipants = list(NamesDB.PID)
+        # Possible matches are elements NOT in BOTH lists
+        possibleMatches = set(AllParticipants) ^ set(previousMatches)
+        Name1 = NamesPID[0]
+        rand2 = random.choice(list(possibleMatches))
+        NamesPID.remove(Name1)
+        NamesPID.remove(rand2)
+        pair = Name1, rand2
+        pairs.append(pair)
+    else:
+        pair = NamesPID[0], NamesPID[1]
         pairs.append(pair)
 
+    # Convert to pandas DataFrame
     pairsnp = np.array(pairs)
     pairsDF = pd.DataFrame(pairsnp, columns = ('personA', 'personB'))
     
+    # Make sure the matches are listed against both people, so copy and invert the columns
     pairsDoubled = pairsDF.copy()
     pairsDoubled = pairsDoubled.rename({'personA': 'personB', 'personB': 'personA'}, axis = 1)
     pairsLong = pd.concat([pairsDF, pairsDoubled]).reset_index(drop = True)
@@ -50,6 +60,3 @@ def sendEmail(names, matches):
         server.sendmail(gmail_user, email, message)
 
     server.quit()
-
-names, matches = runMatch('TestNames.csv')
-sendEmail(names, matches)
