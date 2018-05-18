@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+                    
+<h1>Home</h1>
+
+<span style="background-color: rgba(211,211,211,.5)">
+    <a href="{% url 'home' %}">Home</a>
+</span>&nbsp;
+<a href="{% url 'login' %}">Login&nbsp;</a>
+<a href="{% url 'signup' %}">Signup&nbsp;</a>
+
+<p>Coffee Roulette</p>
+<p>Create business opportunities and connections. Improve culture and increase employee engagement.</p>
+<p>We randomly pair people in your company for coffee each week.</p>
+
+<p>What is Coffee Roulette?
+<p>It’s being randomly matched with new colleagues for coffee meetings each week. Coffee Roulette came about from a desire to connect at work. There are so many people at work that you never get to meet. Coffee Roulette is a simple, but powerful way to bring people together and create business opportunities.</p>
+
+<p>Why use Coffee Roulette?</p>
+<p>You could of course match employees for coffee manually, but as the weeks pass, it becomes more and more time consuming to ensure there are unique matches. We’ve priced Coffee Roulette to make it competitive with the labour cost of keeping track of who’s participating each week and doing the matching manually. It’s set, forget and reap the rewards.</p>
+
+<p>How does it work?</p>
+<p>There are five easy steps: </p>
+<p>1.	Sign up </p>
+<p>2.	Invite employees to join your Coffee Roulette </p>
+<p>3.	Set a start date </p>
+<p>4.	Each week (or fortnight) the Coffee Roulette software matches employees for coffee and emails them details of their coffee partner. It’s then up to the employees to work out a date and time for their coffee meeting. </p>
+<p>5.	Watch connections grow across the company.</p>
+{% endblock %}

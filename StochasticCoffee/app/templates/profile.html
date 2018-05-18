@@ -1,0 +1,31 @@
+{% extends 'base.html' %} 
+{% block content %}
+ 
+<h1>Profile</h1>
+
+<a href="{% url 'home' %}">Home&nbsp;</a>
+<span style="background-color: rgba(211,211,211,.5)">
+    <a href="{% url 'login' %}">Login</a>
+</span>&nbsp;
+<a href="{% url 'signup' %}">Signup&nbsp;</a>
+
+
+<div>
+        <p>first_name: {{ user.first_name }}</p>
+       <p>last_name: {{ user.last_name }}</p>
+       <p>email: {{ user.email }}</p>
+       <p>branch: {{ user.branch }}</p>
+       <p>division: {{ user.division }}</p>
+       <p>frequency: {{ user.frequency }}</p>
+    </div>
+
+
+Past Matches
+
+
+Match for week starting Monday, May 14 2018
+Name: Craig Arthur
+
+Email: craig.arthur@ga.gov.au
+
+{% endblock %}

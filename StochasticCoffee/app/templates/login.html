@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Login</h1>
+
+<a href="{% url 'home' %}">Home&nbsp;</a>
+<span style="background-color: rgba(211,211,211,.5)">
+    <a href="{% url 'login' %}">Login</a>
+</span>&nbsp;
+<a href="{% url 'signup' %}">Signup&nbsp;</a>
+
+
+<form action="" method="POST">
+    {% csrf_token %}
+  email:<br>
+  <input type="text" name="email" value="sheecegardezi@gmail.com">
+  <br>
+  Last name:<br>
+  <input type="text" name="password" value="0">
+  <br><br>
+  <input type="submit" value="Submit">
+</form> 
+
+
+{% endblock %}
